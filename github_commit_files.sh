@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# >>> Version 1.0g
+# >>> Handles commiting Files to GitHub
+
 # ---------------------------
 # ERROR COLOR CODE
 # ---------------------------
