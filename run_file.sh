@@ -40,6 +40,10 @@ int_input_handler(){
     (( ints >= 0 && ints <= 3 )) 
 }
 
+# ============================
+# HOME
+# ============================
+
 # >>> handles home intro
 home_intro(){
     echo -e "\n============ • Run • File • ============\n"
@@ -79,6 +83,7 @@ home_intro(){
             fi
     esac
 }
+
 
 # >>> Handles file name arguments
 home_intro "$1"
