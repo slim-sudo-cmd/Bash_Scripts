@@ -172,19 +172,23 @@ commit_single_file(){
         echo -e "\n${MANG}>>> [!] ERROR : Network Unreachable,Check Your Network Connections !!${NC}"
         exit 1        
     fi
+    git stash &> /dev/null
     if ! git pull origin main --rebase ; then 
         git rebase --abort &> /dev/null 
         git merge --abort &> /dev/null
         rm -rf .git/MERGE_HEAD &> /dev/null
+        git stash pop &> /dev/null
         echo -e "\n${YELL}>>> [-] Aborting Rebase and Exiting Safely.${NC}\n"
         exit 1   
     fi
     echo -e "\n${YELL}>>> [*] Pushing File For Backup ...${NC}"
     if ! curl -sI -m 5 --retry 3 https://github.com &> /dev/null; then 
         echo -e "\n${MANG}>>> [!] ERROR : Network Unreachable, Check Your Network Connections !!${NC}" 
+        git stash pop &> /dev/null
         exit 1
     fi
-    git push -u origin main || { echo -e "\n${MANG}ERROR : Couldn't Push File For Backup !!${NC}" ; exit 1; } 
+    git push -u origin main || { git stash pop &> /dev/null ; echo -e "\n${MANG}ERROR : Couldn't Push File For Backup !!${NC}" ; exit 1; } 
+    git stash pop &> /dev/null
     sleep 2
     echo -e "\n${YELL}>>> [+] $file_name Submitted to GitHub Successfully √${NC}"
     return 0
@@ -252,20 +256,25 @@ commit_multiple_files(){
         echo -e "\n${MANG}>>> [!] ERROR : Network Unreachable,Check Your Network Connections !!${NC}"
         exit 1        
     fi
+    git stash &> /dev/null 
     if ! git pull origin main --rebase ; then 
         echo -e "\n${MANG}Error : A File name at $directory_path caused a Conflict With the Remote Repository !!${NC}"
         git rebase --abort &> /dev/null
         git merge --abort &> /dev/null
         rm -rf .git/MERGE_HEAD &> /dev/null
+        git stash pop &> /dev/null
         echo -e "\n${YELL}>>> [-] Aborting Rebase and Exiting Safely.${NC}\n"
         exit 1
     fi
     echo -e "\n${YELL}>>> [*] Pushing File For Backup ...${NC}"
     if ! curl -sI -m 5 --retry 3 https://github.com &> /dev/null; then
         echo -e "\n${MANG}>>> [!] ERROR : Network Unreachable,Check Your Network Connections !!${NC}"
+        git stash pop &> /dev/null
         exit 1         
     fi
-    git push -u origin main || { echo -e "\n${MANG}ERROR : Couldn't Push File For Back up !!${NC}" ; exit 1; }
+    git push -u origin main || { git stash pop &> /dev/null ; echo -e "\n${MANG}ERROR : Couldn't Push File For Back up !!${NC}" ; exit 1; }
+    git stash pop &> /dev/null
+    sleep 2
     echo -e "\n${YELL}>>> [+] Files in $directory_path\n>>> [+] All Files Submitted to GitHub Successfully √${NC}"
     return 0
 }  
