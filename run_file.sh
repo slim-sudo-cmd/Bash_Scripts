@@ -26,7 +26,6 @@ input_handler(){
         fi
         echo -e "$MANG\n>>> [!] ${err_msg} !! ${NC}\n" 
     done
-
 }
 
 # >>> handles strings inputs
@@ -81,6 +80,7 @@ home_intro(){
     esac
 }
 
+# >>> Handles file name arguments
 home_intro "$1"
 
 
